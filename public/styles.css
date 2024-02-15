@@ -14,6 +14,33 @@ body {
   padding: 1rem;
 }
 
+.my-card img {
+  aspect-ratio: auto;
+  max-width: 285px;
+  height: auto;
+  width: auto;
+}
+
+.my-card::part(base) {
+  background-color: cornflowerblue;
+  border-radius: 2rem;
+}
+
+.my-card::part(image) {
+  border-radius: 2rem;
+}
+.my-card::part(body) {
+  background-color: orange;
+}
+
+.card-demo::part(image) {
+  border-radius: 2rem;
+}
+
+.card-demo::part(footer) {
+  background-color: orange;
+}
+
 .row {
   display: flex;
   align-items: center;
