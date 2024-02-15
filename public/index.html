@@ -29,18 +29,29 @@
 
     <script defer>
       const state = {
+        nfl: {
+          league: 'AFC',
+          division: 'West',
+          team: 'Kansas City Chiefs'
+        },
         prefersDark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+        setPrefersDark(prefersDark) {
+          this.prefersDark = prefersDark;
+        },
         toggleCount: 0
       };
 
-      document.addEventListener('alpine:init', () => {
-        Alpine.data('state', () => state);
-      });
+      const getState = () => state;
+
+      // document.addEventListener('alpine:init', () => {
+      //   Alpine.data('state', () => state);
+      // });
 
       window
         .matchMedia('(prefers-color-scheme: dark)')
         .addEventListener('change', event => {
-          state.prefersDark = event.matches;
+          // state.prefersDark = event.matches;
+          setPrefersDark(event.matches);
           updateMode();
         });
 
@@ -70,7 +81,7 @@
       }
     </script>
   </head>
-  <body x-data="state" x-init="configureWatches($watch)">
+  <body x-data="getState()" x-init="configureWatches($watch)">
     <div class="row">
       <sl-button hx-get="/version" hx-target="#version">
         Get Bun Version
@@ -79,10 +90,12 @@
     </div>
     <hr />
     <div>
-      <sl-button @click="toggleCount++; toggleAlert()">
-        Toggle Alert
-        <sl-badge pill x-text="toggleCount"></sl-badge>
-      </sl-button>
+      <sl-tooltip content="This toggles the display of an alert.">
+        <sl-button @click="toggleCount++; toggleAlert()">
+          Toggle Alert
+          <sl-badge pill x-text="toggleCount"></sl-badge>
+        </sl-button>
+      </sl-tooltip>
       <sl-alert closable>
         <sl-icon slot="icon" name="info-circle"></sl-icon>
         This is a standard alert. You can customize its content and even the
@@ -105,6 +118,55 @@
         image="/Boston2013.png"
         label="Boston Marathon 2013"
       ></sl-avatar>
+    </div>
+    <hr />
+    <div>
+      <sl-breadcrumb>
+        <sl-breadcrumb-item>NFL</sl-breadcrumb-item>
+        <sl-breadcrumb-item>
+          <span x-text="nfl.league"></span>
+          <sl-dropdown slot="suffix">
+            <sl-button slot="trigger" size="small" circle>
+              <sl-icon label="More options" name="three-dots"></sl-icon>
+            </sl-button>
+            <sl-menu @sl-select="nfl.league = $event.detail.item.textContent">
+              <sl-menu-item type="checkbox" checked>AFC</sl-menu-item>
+              <sl-menu-item type="checkbox">NFC</sl-menu-item>
+            </sl-menu>
+          </sl-dropdown>
+        </sl-breadcrumb-item>
+        <sl-breadcrumb-item>
+          <span x-text="nfl.division"></span>
+          <sl-dropdown slot="suffix">
+            <sl-button slot="trigger" size="small" circle>
+              <sl-icon label="More options" name="three-dots"></sl-icon>
+            </sl-button>
+            <sl-menu @sl-select="nfl.division = $event.detail.item.textContent">
+              <sl-menu-item type="checkbox">East</sl-menu-item>
+              <sl-menu-item type="checkbox">North</sl-menu-item>
+              <sl-menu-item type="checkbox">South</sl-menu-item>
+              <sl-menu-item type="checkbox" checked>West</sl-menu-item>
+            </sl-menu>
+          </sl-dropdown>
+        </sl-breadcrumb-item>
+        <sl-breadcrumb-item>
+          <span x-text="nfl.team"></span>
+          <sl-dropdown slot="suffix">
+            <sl-button slot="trigger" size="small" circle>
+              <sl-icon label="More options" name="three-dots"></sl-icon>
+            </sl-button>
+            <sl-menu @sl-select="nfl.team = $event.detail.item.textContent">
+              <!-- TODO: Use htmx to get the menu items for the selected league and division. -->
+              <sl-menu-item type="checkbox">Denver Broncos</sl-menu-item>
+              <sl-menu-item type="checkbox" checked
+                >Kansas City Chiefs</sl-menu-item
+              >
+              <sl-menu-item type="checkbox">Las Vegas Raiders</sl-menu-item>
+              <sl-menu-item type="checkbox">Los Angeles Chargers</sl-menu-item>
+            </sl-menu>
+          </sl-dropdown>
+        </sl-breadcrumb-item>
+      </sl-breadcrumb>
     </div>
     <hr />
     <div>
