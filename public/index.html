@@ -29,7 +29,8 @@
 
     <script defer>
       const state = {
-        prefersDark: window.matchMedia('(prefers-color-scheme: dark)').matches
+        prefersDark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+        toggleCount: 0
       };
 
       document.addEventListener('alpine:init', () => {
@@ -78,12 +79,32 @@
     </div>
     <hr />
     <div>
-      <sl-button @click="toggleAlert()"> Toggle Alert </sl-button>
+      <sl-button @click="toggleCount++; toggleAlert()">
+        Toggle Alert
+        <sl-badge pill x-text="toggleCount"></sl-badge>
+      </sl-button>
       <sl-alert closable>
         <sl-icon slot="icon" name="info-circle"></sl-icon>
         This is a standard alert. You can customize its content and even the
         icon.
       </sl-alert>
+    </div>
+    <hr />
+    <div>
+      <sl-animation name="swing" easing="ease-in-out" duration="1000" play>
+        <div class="box">Wake Up!</div>
+      </sl-animation>
+    </div>
+    <hr />
+    <div>
+      <sl-avatar initials="MV" label="Mark Volkmann"></sl-avatar>
+      <sl-avatar label="Archive">
+        <sl-icon name="archive" slot="icon"></sl-icon>
+      </sl-avatar>
+      <sl-avatar
+        image="/Boston2013.png"
+        label="Boston Marathon 2013"
+      ></sl-avatar>
     </div>
     <hr />
     <div>
